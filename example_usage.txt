@@ -1,0 +1,179 @@
+
+Dylos is (r) registered trademark Dylos Corporation
+2900 Adams St#C38, Riverside, CA92504 PH:877-351-2730
+
+Windows is a (r) registered trademark of Microsoft Corporation.
+
+------------------------------------------------------------------
+
+This dylosmon utility will read, display and log the device information 
+and data from a DYLOS device on Linux.
+
+The output is logged in same format as the Windows Dylos_logger 
+software as provided by the Dylos Corporation. 
+
+The big differences are that it can run in the background without 
+interactive intervention and has optional parameters for formatting 
+the logged data. As such it can be used to start at system boot, or 
+on a regular interval (using cron) to capture data from Dylos.
+
+Please find below usage examples (taken with a Dylos DC1700):
+
+## A. without option
+## B. with logging (also show -c)
+## C. with logging (-l) and no banners (-b) 
+## D. with logging (-l) and timestamp (-t) (and -T)
+## E. with logging (-l) and stored values (-s) (and -t)
+## F. with logging (-l) and stored values (-s) and no banners (-b)
+
+
+## A. without option
+
+"sudo ./dylosmon" without options will only display on screen the device 
+information and add every minute the measured results as provided by 
+the Dylos device.
+
+on screen :
+Device information : DC1700 v 2.08
+336,0
+1659,93
+
+Where 1659 is the PM0.5 and 93 the PM2.5 value.
+
+## B. with logging
+
+"sudo ./dylosmon -l dylosout" will display on screen and log  
+information in the file "dylosout" the device information and add every 
+minute the measured results as provided by the Dylos device:
+
+on screen :
+Device information : DC1700 v 2.08
+1614,98
+1608,81
+1593,82
+
+in dylosout :
+------------------------------
+Dylos Linux Logger v 1.0
+Unit: DC1700 v 2.08
+Date/Time : 03- 2-17 09:12
+------------------------------
+Particles per cubic foot / 100
+------------------------------
+Small,Large
+1614,98
+1608,81
+1593,82
+
+p.s. If the logfile ("dylosout" in this case) already exists a 
+question will be raised to ask whether to overwrite and must be answered:
+Log file: 'dylosout' exists. Continue to overwrite ? (y or n)
+Placing '-c' BEFORE the '-l' option (e.g. sudo ./dylosmon -c -l dylosout)
+will skip checking for logfile existence and overwrite.
+
+## C. with logging (-l) and no banners (-b)
+
+"sudo ./dylosmon -l dylosout -b" will display on screen and log  
+information in the file "dylosout" the device information and add every 
+minute the measured results as provided by the DC1700 without banners 
+in the log file:
+
+on screen :
+Device information : DC1700 v 2.08
+1556,70
+1611,83
+
+in dylosout :
+1556,70
+1611,83
+
+
+## D. with logging (-l) and timestamp (-t)
+
+"sudo ./dylosmon -l dylosout -t" will display on screen and log  
+information in the file "dylosout" the device information and log every 
+minute the timestamped measured results as provided by the Dylos device:
+
+on screen :
+Device information : DC1700 v 2.08
+1573,72
+1596,78
+1552,83
+
+in dylosout :
+------------------------------
+Dylos Linux Logger v 1.0
+Unit: DC1700 v 2.08
+Date/Time : 03- 2-17 09:22
+------------------------------
+Particles per cubic foot / 100
+------------------------------
+Date      Time, Small, Large
+02- 3-17, 09:23, 1573,72
+02- 3-17, 09:24, 1596,78
+02- 3-17, 09:25, 1552,83
+
+The timestamp is in the format dd-mm-yy hh:mm. With the option '-T'
+a timestamp is added in the format mm-dd-yy hh:mm. 
+ 
+## E. with logging (-l) and stored values (-s)
+
+"sudo ./dylosmon -s -l dylosout" will display on screen and log  
+information in the file "dylosout" the device unit information and the
+stored history as provided by the DC1700:
+
+on screen:
+Device information : DC1700 v 2.08
+02/27/17 10:52,1879,54
+02/27/17 10:53,1848,57
+02/27/17 10:54,1753,48
+02/27/17 10:55,1649,49
+
+in dylosout:
+------------------------------
+Dylos Linux Logger v 1.0
+Unit: DC1700 v 2.08
+Date/Time : 03- 2-17 09:35
+------------------------------
+Particles per cubic foot / 100
+------------------------------
+mm-dd-yy Time, Small, Large
+02-27-17 10:52, 1879, 54
+02-27-17 10:53, 1848, 57
+02-27-17 10:54, 1753, 48
+02-27-17 10:55, 1649, 49
+
+p.s. The timestamp is in the format mm-dd-yy hh:mm. With the option '-t'
+a timestamp is applied in the log file with the format dd-mm-yy hh:mm.
+
+## F. with logging (-l) and stored values (-s) and no banners (-b)
+
+"sudo ./dylosmon -s -l dylosout" will display on screen and log  
+information in the file "dylosout" the device unit information and the
+stored history as provided by the DC1700:
+
+on screen:
+Device information : DC1700 v 2.08
+02/27/17 10:52,1879,54
+02/27/17 10:53,1848,57
+02/27/17 10:54,1753,48
+02/27/17 10:55,1649,49
+
+in dylosout:
+02-27-17 10:52, 1879, 54
+02-27-17 10:53, 1848, 57
+02-27-17 10:54, 1753, 48
+02-27-17 10:55, 1649, 49
+
+P.s. it is assumed that only DC17xx devices will provide stored data
+or history information. If another device is used an error message is
+displayed.
+
+p.s. The timestamp is in the format mm-dd-yy hh:mm. With the option '-t'
+a timestamp is applied in the log file with the format dd-mm-yy hh:mm.
+
+All debug/error message are written to stderr, where as other screen 
+output is to stdout. This can be redirected seperately
+sudo ./dylosmon 1>screenout  2>debugout
+
+Copyright (c) 2017 Paul van Haastrecht <paulvha@hotmail.com>
