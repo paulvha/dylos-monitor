@@ -138,7 +138,7 @@ void set_log_file(char *name)
 	// check that real logfile name was provided (and not a next option)
 	if(name[0] == '-')
 	{
-		dbprintf(1,"Log filename '%s'should not start with '-'\n",name);
+		dbprintf(1,"Log filename '%s' should not start with '-'\n",name);
 		exit(0);
 	}	
 	
